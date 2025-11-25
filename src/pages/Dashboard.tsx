@@ -76,49 +76,49 @@ const Dashboard = () => {
       title: "Criar Meu SaaS",
       description: "Gere projetos completos com questionário inteligente",
       color: "from-primary/20 to-secondary/20",
-      comingSoon: true,
+      path: "/criar-saas",
     },
     {
       icon: FileText,
       title: "Gerador de Prompts",
       description: "Prompts otimizados para Lovable",
       color: "from-secondary/20 to-accent/20",
-      comingSoon: true,
+      path: "/gerador-prompts",
     },
     {
       icon: FileText,
       title: "Gerador de Contratos",
       description: "Contratos e propostas profissionais",
       color: "from-accent/20 to-primary/20",
-      comingSoon: true,
+      path: "/gerador-contratos",
     },
     {
       icon: Users,
       title: "Prospecção de Clientes",
       description: "Encontre clientes na sua cidade",
       color: "from-primary/20 to-accent/20",
-      comingSoon: true,
+      path: "/prospeccao-clientes",
     },
     {
       icon: MessageSquare,
       title: "Mensagens Prontas",
       description: "Copy otimizado para vendas",
       color: "from-secondary/20 to-primary/20",
-      comingSoon: true,
+      path: "/mensagens-prontas",
     },
     {
       icon: BookOpen,
       title: "Academia",
       description: "Treinamentos e conteúdo exclusivo",
       color: "from-accent/20 to-secondary/20",
-      comingSoon: true,
+      path: "/academia",
     },
     {
       icon: DollarSign,
       title: "Afiliados",
       description: "Sistema de comissões 50%",
       color: "from-primary/20 to-secondary/20",
-      comingSoon: true,
+      path: "/afiliados",
     },
   ];
 
@@ -170,13 +170,9 @@ const Dashboard = () => {
           {tools.map((tool, index) => (
             <Card
               key={index}
+              onClick={() => navigate(tool.path)}
               className={`p-6 bg-gradient-to-br ${tool.color} border-primary/20 hover:border-primary/50 transition-all cursor-pointer group relative overflow-hidden`}
             >
-              {tool.comingSoon && (
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-accent/20 text-accent text-xs font-bold">
-                  EM BREVE
-                </div>
-              )}
               <div className="w-12 h-12 rounded-lg bg-card flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <tool.icon className="w-6 h-6 text-primary" />
               </div>
