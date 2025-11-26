@@ -3,136 +3,96 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, MessageSquare, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const MensagensProntas = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [tipoMensagem, setTipoMensagem] = useState("");
-  const [nicho, setNicho] = useState("");
   const [mensagemGerada, setMensagemGerada] = useState("");
   const [copied, setCopied] = useState(false);
-
-  const mensagemTemplates: Record<string, Record<string, Record<string, string>>> = {
-    curta: {
-      Restaurante: {
-        default: "Olá! 👋 Notei que seu restaurante ainda não tem um site profissional. Que tal ter um cardápio digital moderno e atrair mais clientes? Posso te mostrar como! 🍽️",
-      },
-      Loja: {
-        default: "Oi! 🛍️ Vi que sua loja tem potencial para vender muito mais online. Já pensou em ter uma loja virtual profissional? Posso te ajudar! 💻",
-      },
-      Clínica: {
-        default: "Olá! 👨‍⚕️ Sua clínica merece uma presença digital à altura. Que tal um site profissional com agendamento online? Vamos conversar! 📅",
-      },
-      Academia: {
-        default: "Oi! 💪 Sua academia pode atrair muito mais alunos com presença digital. Que tal um site com agendamento de aulas e planos online? Vamos conversar! 🏋️",
-      },
-      Salão: {
-        default: "Olá! ✨ Seu salão merece estar online! Que tal um site com agendamento automático e galeria de trabalhos? Posso te ajudar! 💇",
-      },
-      Construtora: {
-        default: "Olá! 🏗️ Sua construtora precisa de uma presença digital profissional. Portfólio de obras + formulário de orçamento? Vamos conversar! 📐",
-      },
-    },
-    longa: {
-      Restaurante: {
-        default: `Olá! 👋
-
-Espero que esteja tudo bem! Eu sou da ZanluNet e somos especializados em criar sites profissionais para restaurantes.
-
-Notei que seu negócio tem muito potencial, mas ainda não tem uma presença digital forte. Hoje em dia, 80% dos clientes pesquisam online antes de escolher onde comer.
-
-Podemos criar para você:
-✅ Site profissional e moderno
-✅ Cardápio digital interativo
-✅ Sistema de pedidos online
-✅ Integração com WhatsApp
-✅ Fotos profissionais dos pratos
-
-Tudo por um preço justo e com pagamento facilitado.
-
-Que tal conversarmos? Tenho certeza que posso ajudar seu restaurante a crescer! 🍽️
-
-Aguardo seu retorno!`,
-      },
-      Loja: {
-        default: `Olá! 👋
-
-Tudo bem? Sou da ZanluNet, especializada em criar lojas virtuais profissionais.
-
-Reparei que sua loja tem produtos incríveis, mas ainda não está vendendo online. Você sabia que pode aumentar suas vendas em até 300% com uma loja virtual?
-
-Oferecemos:
-✅ Loja virtual completa
-✅ Integração com pagamento
-✅ Controle de estoque
-✅ Painel administrativo
-✅ Suporte técnico
-
-Investimento acessível e resultados garantidos!
-
-Posso te mostrar alguns cases de sucesso. Vamos conversar? 🛍️`,
-      },
-      Clínica: {
-        default: `Olá! 👋
-
-Sou da ZanluNet e trabalho com transformação digital para clínicas e consultórios.
-
-Seus pacientes estão buscando você online, mas será que te encontram facilmente? Um site profissional pode:
-
-✅ Aumentar o número de agendamentos
-✅ Passar mais credibilidade
-✅ Facilitar o contato dos pacientes
-✅ Mostrar seus diferenciais
-✅ Integrar com WhatsApp
-
-Temos planos especiais para profissionais da saúde!
-
-Que tal marcarmos uma conversa rápida? 👨‍⚕️`,
-      },
-      Academia: {
-        default: `Olá! 👋
-
-Sou da ZanluNet e ajudo academias a crescerem no digital!
-
-Sua academia pode atrair muito mais alunos com uma presença online forte:
-
-✅ Site profissional com seus diferenciais
-✅ Agendamento de aulas online
-✅ Galeria de fotos da estrutura
-✅ Venda de planos online
-✅ Integração com redes sociais
-
-Academias com site profissional convertem 3x mais!
-
-Vamos conversar sobre como podemos ajudar? 💪`,
-      },
-    },
-    followup: {
-      Restaurante: {
-        default: "Oi! Vi que você visualizou minha mensagem. Conseguiu dar uma olhada na proposta? Se tiver alguma dúvida, é só chamar! Tenho cases incríveis para te mostrar 🍽️",
-      },
-      Loja: {
-        default: "Oi! Tudo bem? Pensei em você e queria saber se gostaria de ver alguns exemplos de lojas virtuais que criamos. Tenho certeza que vai gostar! 🛍️",
-      },
-      Clínica: {
-        default: "Olá! Conseguiu pensar na nossa conversa? Preparei uma proposta especial para sua clínica. Quando podemos conversar? 👨‍⚕️",
-      },
-    },
-  };
+  
+  const [formData, setFormData] = useState({
+    seuNome: "",
+    empresaAlvo: "",
+    pessoaAlvo: "",
+    problema: "",
+    solucao: "",
+    diferencial: "",
+    objetivo: "",
+    tom: ""
+  });
 
   const gerarMensagem = () => {
-    if (!tipoMensagem || !nicho) {
+    const { seuNome, empresaAlvo, pessoaAlvo, problema, solucao, diferencial, objetivo, tom } = formData;
+    
+    if (!seuNome || !empresaAlvo || !problema || !solucao || !diferencial || !objetivo || !tom) {
       toast({
         title: "Campos obrigatórios",
-        description: "Escolha o tipo e nicho para gerar a mensagem",
+        description: "Preencha todos os campos para gerar a mensagem",
         variant: "destructive",
       });
       return;
     }
 
-    const mensagem = mensagemTemplates[tipoMensagem]?.[nicho]?.default || "Mensagem não encontrada";
+    let mensagem = "";
+    const saudacao = pessoaAlvo ? `Olá, ${pessoaAlvo}!` : `Olá!`;
+    
+    if (tom === "formal") {
+      mensagem = `${saudacao}
+
+Meu nome é ${seuNome} e gostaria de apresentar uma solução que pode beneficiar a ${empresaAlvo}.
+
+Percebi que ${problema}, e acredito que posso ajudar com isso.
+
+Nossa solução: ${solucao}
+
+Nosso diferencial: ${diferencial}
+
+${objetivo}
+
+Fico à disposição para agendar uma conversa e apresentar mais detalhes sobre como podemos contribuir para o crescimento da ${empresaAlvo}.
+
+Atenciosamente,
+${seuNome}`;
+    } else if (tom === "casual") {
+      mensagem = `${saudacao} 👋
+
+Tudo bem? Sou o(a) ${seuNome}!
+
+Estava dando uma olhada na ${empresaAlvo} e percebi que ${problema}.
+
+Tenho uma solução que pode te ajudar: ${solucao}
+
+O legal é que ${diferencial}! 
+
+${objetivo}
+
+Que tal trocarmos uma ideia sobre isso? Tenho certeza que posso agregar bastante para a ${empresaAlvo}! 😊
+
+Abraço,
+${seuNome}`;
+    } else { // direta
+      mensagem = `${saudacao}
+
+${seuNome} aqui.
+
+Identificamos que a ${empresaAlvo} ${problema}.
+
+Solução: ${solucao}
+
+Diferencial: ${diferencial}
+
+${objetivo}
+
+Vamos conversar?
+
+${seuNome}`;
+    }
+    
     setMensagemGerada(mensagem);
   };
 
@@ -174,34 +134,91 @@ Vamos conversar sobre como podemos ajudar? 💪`,
             <CardContent className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Tipo de Mensagem</label>
-                  <Select onValueChange={setTipoMensagem}>
+                  <Label htmlFor="seuNome">Seu Nome</Label>
+                  <Input
+                    id="seuNome"
+                    placeholder="Ex: João Silva"
+                    value={formData.seuNome}
+                    onChange={(e) => setFormData({ ...formData, seuNome: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="empresaAlvo">Nome da Empresa Alvo</Label>
+                  <Input
+                    id="empresaAlvo"
+                    placeholder="Ex: Restaurante Sabor do Mar"
+                    value={formData.empresaAlvo}
+                    onChange={(e) => setFormData({ ...formData, empresaAlvo: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="pessoaAlvo">Nome da Pessoa Alvo (Opcional)</Label>
+                  <Input
+                    id="pessoaAlvo"
+                    placeholder="Ex: Maria"
+                    value={formData.pessoaAlvo}
+                    onChange={(e) => setFormData({ ...formData, pessoaAlvo: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tom">Tom da Mensagem</Label>
+                  <Select onValueChange={(value) => setFormData({ ...formData, tom: value })}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Escolha o tipo" />
+                      <SelectValue placeholder="Escolha o tom" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="curta">Mensagem Curta (Primeira abordagem)</SelectItem>
-                      <SelectItem value="longa">Mensagem Longa (Detalhada)</SelectItem>
-                      <SelectItem value="followup">Follow-up (Segunda mensagem)</SelectItem>
+                      <SelectItem value="formal">Formal</SelectItem>
+                      <SelectItem value="casual">Casual</SelectItem>
+                      <SelectItem value="direta">Direta e Objetiva</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Nicho do Cliente</label>
-                  <Select onValueChange={setNicho}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Escolha o nicho" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Restaurante">Restaurante</SelectItem>
-                      <SelectItem value="Loja">Loja/Comércio</SelectItem>
-                      <SelectItem value="Clínica">Clínica/Saúde</SelectItem>
-                      <SelectItem value="Academia">Academia</SelectItem>
-                      <SelectItem value="Salão">Salão de Beleza</SelectItem>
-                      <SelectItem value="Construtora">Construtora</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="problema">Principal Problema que seu Produto Resolve</Label>
+                  <Textarea
+                    id="problema"
+                    placeholder="Ex: não possui presença digital e está perdendo clientes para concorrentes"
+                    value={formData.problema}
+                    onChange={(e) => setFormData({ ...formData, problema: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="solucao">Sua Solução em uma Frase</Label>
+                  <Textarea
+                    id="solucao"
+                    placeholder="Ex: criamos sites profissionais que aumentam vendas em até 300%"
+                    value={formData.solucao}
+                    onChange={(e) => setFormData({ ...formData, solucao: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="diferencial">Seu Principal Diferencial</Label>
+                  <Textarea
+                    id="diferencial"
+                    placeholder="Ex: entregamos em 48h com suporte vitalício incluso"
+                    value={formData.diferencial}
+                    onChange={(e) => setFormData({ ...formData, diferencial: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="objetivo">Objetivo da Mensagem</Label>
+                  <Textarea
+                    id="objetivo"
+                    placeholder="Ex: Gostaria de agendar uma conversa de 15 minutos para apresentar nossa solução"
+                    value={formData.objetivo}
+                    onChange={(e) => setFormData({ ...formData, objetivo: e.target.value })}
+                    rows={2}
+                  />
                 </div>
               </div>
 
@@ -211,7 +228,7 @@ Vamos conversar sobre como podemos ajudar? 💪`,
                 size="lg"
               >
                 <MessageSquare className="w-5 h-5 mr-2" />
-                Gerar Mensagem
+                Gerar Mensagem Personalizada
               </Button>
             </CardContent>
           </Card>
