@@ -13,6 +13,7 @@ const Academia = () => {
       duracao: "2h 30min",
       modulos: 8,
       icon: Play,
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     {
       titulo: "Criando Projetos na Lovable",
@@ -20,6 +21,7 @@ const Academia = () => {
       duracao: "3h 15min",
       modulos: 12,
       icon: Video,
+      videoUrl: "https://www.youtube.com/watch?v=9KHLTZaJcR8",
     },
     {
       titulo: "Copywriting para Desenvolvedores",
@@ -27,15 +29,43 @@ const Academia = () => {
       duracao: "1h 45min",
       modulos: 6,
       icon: FileText,
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    },
+    {
+      titulo: "Marketing Digital para Desenvolvedores",
+      descricao: "Aprenda a divulgar seus serviços e atrair clientes",
+      duracao: "2h 00min",
+      modulos: 10,
+      icon: Play,
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    },
+    {
+      titulo: "Precificação de Projetos Web",
+      descricao: "Como cobrar o valor justo pelos seus serviços",
+      duracao: "1h 30min",
+      modulos: 5,
+      icon: FileText,
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    },
+    {
+      titulo: "Gestão de Clientes e Prazos",
+      descricao: "Organize seus projetos e mantenha clientes satisfeitos",
+      duracao: "2h 15min",
+      modulos: 7,
+      icon: Video,
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
   ];
 
   const materiais = [
-    "📚 E-book: Guia Completo de Prospecção Digital",
-    "🎨 Templates Prontos de Propostas Comerciais",
-    "💼 Planilha de Gestão de Clientes",
-    "🎯 Checklist de Entrega de Projetos",
-    "📊 Dashboard de Métricas de Vendas",
+    { nome: "📚 E-book: Guia Completo de Prospecção Digital", tamanho: "2.5 MB" },
+    { nome: "🎨 Templates Prontos de Propostas Comerciais", tamanho: "1.2 MB" },
+    { nome: "💼 Planilha de Gestão de Clientes", tamanho: "850 KB" },
+    { nome: "🎯 Checklist de Entrega de Projetos", tamanho: "450 KB" },
+    { nome: "📊 Dashboard de Métricas de Vendas", tamanho: "3.1 MB" },
+    { nome: "📝 Modelo de Contrato Completo", tamanho: "620 KB" },
+    { nome: "🎬 Scripts de Vendas Prontos", tamanho: "780 KB" },
+    { nome: "💡 Ideias de Projetos para Portfólio", tamanho: "1.5 MB" },
   ];
 
   return (
@@ -85,7 +115,7 @@ const Academia = () => {
                       <span>⏱️ {curso.duracao}</span>
                       <span>📚 {curso.modulos} módulos</span>
                     </div>
-                    <Button className="w-full" size="sm">
+                    <Button className="w-full" size="sm" onClick={() => window.open(curso.videoUrl, '_blank')}>
                       <Play className="w-4 h-4 mr-2" />
                       Assistir Curso
                     </Button>
@@ -107,7 +137,10 @@ const Academia = () => {
                     key={index}
                     className="p-4 bg-muted/50 rounded-lg border border-border hover:border-primary/50 transition-all flex items-center justify-between group cursor-pointer"
                   >
-                    <span>{material}</span>
+                    <div className="flex-1">
+                      <span className="block">{material.nome}</span>
+                      <span className="text-xs text-muted-foreground">{material.tamanho}</span>
+                    </div>
                     <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100 transition-opacity">
                       Baixar
                     </Button>

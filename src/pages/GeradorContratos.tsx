@@ -46,7 +46,17 @@ Após o pagamento integral, todos os direitos sobre o website serão transferido
 6. GARANTIA E SUPORTE
 A CONTRATADA oferece 30 dias de garantia e suporte técnico após a entrega.
 
-7. FORO
+7. RESPONSABILIDADES DO CONTRATANTE
+- Fornecer todo conteúdo (textos, imagens, logos) dentro do prazo acordado
+- Realizar aprovações e feedbacks em até 5 dias úteis
+- Efetuar os pagamentos nas datas acordadas
+
+8. RESPONSABILIDADES DA CONTRATADA
+- Desenvolver o website conforme especificações acordadas
+- Entregar o projeto no prazo estipulado
+- Prestar suporte técnico durante o período de garantia
+
+9. FORO
 Fica eleito o foro da comarca de [CIDADE] para dirimir quaisquer questões oriundas deste contrato.
 
 Data: ${new Date().toLocaleDateString('pt-BR')}
@@ -72,13 +82,113 @@ Prestação de serviços digitais conforme descrito abaixo.
 ${dados.descricaoServico}
 
 3. VALOR
-Valor: R$ ${dados.valorServico}
+Valor mensal: R$ ${dados.valorServico}
+Primeiro pagamento na assinatura do contrato e demais todo dia 05 de cada mês.
 
 4. VIGÊNCIA
-Este contrato tem vigência de 12 meses a partir da data de assinatura.
+Este contrato tem vigência de 12 meses a partir da data de assinatura, renovável automaticamente.
 
 5. RESCISÃO
 Qualquer das partes pode rescindir mediante aviso prévio de 30 dias.
+
+6. MULTA RESCISÓRIA
+Em caso de rescisão antecipada sem justa causa pelo CONTRATANTE, será cobrada multa de 20% sobre o valor restante.
+
+7. FORO
+Comarca de [CIDADE].
+
+Data: ${new Date().toLocaleDateString('pt-BR')}
+
+_______________________________
+CONTRATANTE
+
+_______________________________
+CONTRATADA
+    `,
+    "proposta-comercial": (dados) => `
+PROPOSTA COMERCIAL
+
+DE: ZanluNet - Soluções Digitais
+PARA: ${dados.nomeCliente}
+CPF/CNPJ: ${dados.cpfCnpj}
+DATA: ${new Date().toLocaleDateString('pt-BR')}
+
+APRESENTAÇÃO
+A ZanluNet é uma empresa especializada em soluções digitais, com foco em desenvolvimento de sites, sistemas e aplicações web.
+
+OBJETIVO DO PROJETO
+${dados.descricaoServico}
+
+ESCOPO DO PROJETO
+${dados.descricaoServico}
+
+INVESTIMENTO
+Valor Total: R$ ${dados.valorServico}
+
+Forma de Pagamento:
+- 40% na aprovação da proposta
+- 30% na entrega do layout
+- 30% na entrega final
+
+PRAZO DE ENTREGA
+30 dias corridos após aprovação do projeto e recebimento do primeiro pagamento.
+
+O QUE ESTÁ INCLUSO:
+✅ Design responsivo (mobile, tablet, desktop)
+✅ Otimização de SEO básica
+✅ Integração com redes sociais
+✅ Formulário de contato
+✅ 30 dias de garantia e suporte
+✅ Treinamento de uso
+
+O QUE NÃO ESTÁ INCLUSO:
+❌ Hospedagem e domínio (indicamos fornecedores)
+❌ Produção de conteúdo (textos e imagens)
+❌ Marketing digital
+
+VALIDADE DA PROPOSTA
+Esta proposta tem validade de 15 dias.
+
+Estamos à disposição para esclarecimentos!
+
+Atenciosamente,
+ZanluNet - Soluções Digitais
+    `,
+    "termo-manutencao": (dados) => `
+TERMO DE MANUTENÇÃO E SUPORTE
+
+CONTRATANTE: ${dados.nomeCliente}
+CPF/CNPJ: ${dados.cpfCnpj}
+
+CONTRATADA: ZanluNet - Soluções Digitais
+
+1. OBJETO
+Manutenção e suporte técnico conforme especificado.
+
+2. SERVIÇOS INCLUSOS
+${dados.descricaoServico}
+
+Serviços mensais inclusos:
+- Atualização de conteúdo (até 5h/mês)
+- Backup semanal
+- Monitoramento de segurança
+- Suporte técnico via WhatsApp
+- Relatório mensal de desempenho
+
+3. VALOR
+Valor mensal: R$ ${dados.valorServico}
+Pagamento todo dia 05 de cada mês.
+
+4. VIGÊNCIA
+Contrato mensal, renovável automaticamente.
+
+5. SLA - TEMPO DE RESPOSTA
+- Suporte: até 24h úteis
+- Correção de bugs críticos: até 48h úteis
+- Atualizações de conteúdo: até 5 dias úteis
+
+6. RESCISÃO
+Cancelamento com 30 dias de antecedência, sem multa.
 
 Data: ${new Date().toLocaleDateString('pt-BR')}
 
@@ -168,6 +278,8 @@ CONTRATADA
                     <SelectContent>
                       <SelectItem value="venda-site">Venda de Website</SelectItem>
                       <SelectItem value="prestacao-servico">Prestação de Serviço</SelectItem>
+                      <SelectItem value="proposta-comercial">Proposta Comercial</SelectItem>
+                      <SelectItem value="termo-manutencao">Termo de Manutenção</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
