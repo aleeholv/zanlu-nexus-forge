@@ -18,6 +18,7 @@ const CriarSaas = () => {
     nomeSite: "",
     corPrincipal: "",
     estilo: "",
+    tipoProjeto: "",
     funcionalidades: "",
     imagensDesejadas: "",
     publicoAlvo: "",
@@ -31,6 +32,8 @@ const CriarSaas = () => {
 
   const generatePrompt = () => {
     const prompt = `Crie um projeto completo para: ${formData.nomeSite}
+
+TIPO DE PROJETO: ${formData.tipoProjeto || "Website"}
 
 ESTILO VISUAL:
 - Cor principal: ${formData.corPrincipal}
@@ -48,7 +51,15 @@ ${formData.publicoAlvo}
 OBJETIVO:
 ${formData.objetivo}
 
-Por favor, crie uma aplicação moderna, responsiva e completa seguindo estas especificações.`;
+REQUISITOS TÉCNICOS:
+- Design responsivo (mobile-first)
+- Performance otimizada
+- SEO básico implementado
+- Componentes reutilizáveis
+- Animações suaves e modernas
+- Acessibilidade (a11y)
+
+Por favor, crie uma aplicação moderna, profissional e completa seguindo estas especificações.`;
 
     setGeneratedPrompt(prompt);
     setStep(2);
@@ -126,6 +137,26 @@ Por favor, crie uma aplicação moderna, responsiva e completa seguindo estas es
                     <SelectItem value="Minimalista Claro">Minimalista Claro</SelectItem>
                     <SelectItem value="Glassmorphism Moderno">Glassmorphism</SelectItem>
                     <SelectItem value="Gradientes Vibrantes">Gradientes Vibrantes</SelectItem>
+                    <SelectItem value="Corporativo Profissional">Corporativo Profissional</SelectItem>
+                    <SelectItem value="Criativo e Artístico">Criativo e Artístico</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="tipoProjeto">Tipo de Projeto</Label>
+                <Select onValueChange={(value) => handleInputChange("tipoProjeto", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Escolha o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Landing Page">Landing Page</SelectItem>
+                    <SelectItem value="Site Institucional">Site Institucional</SelectItem>
+                    <SelectItem value="E-commerce">E-commerce</SelectItem>
+                    <SelectItem value="SaaS/Plataforma">SaaS/Plataforma</SelectItem>
+                    <SelectItem value="Dashboard">Dashboard</SelectItem>
+                    <SelectItem value="Blog">Blog</SelectItem>
+                    <SelectItem value="Portfólio">Portfólio</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

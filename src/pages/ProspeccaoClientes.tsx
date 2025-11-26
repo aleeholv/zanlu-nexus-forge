@@ -12,6 +12,7 @@ interface Cliente {
   nome: string;
   nicho: string;
   contato: string;
+  endereco: string;
 }
 
 const ProspeccaoClientes = () => {
@@ -21,6 +22,58 @@ const ProspeccaoClientes = () => {
   const [nicho, setNicho] = useState("");
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [copied, setCopied] = useState<number | null>(null);
+
+  const nomesEstabelecimentos: Record<string, string[]> = {
+    Restaurante: [
+      "Restaurante e Pizzaria", "Churrascaria", "Lanchonete", "Hamburgueria",
+      "Restaurante Self-Service", "Pizzaria", "Pastelaria", "Açaí & Sorvetes",
+      "Comida Caseira", "Espetaria", "Sushi Bar", "Cantina Italiana",
+      "Restaurante Vegano", "Food Truck", "Bistrô"
+    ],
+    Loja: [
+      "Modas e Confecções", "Calçados e Acessórios", "Boutique", "Loja de Roupas",
+      "Variedades e Presentes", "Perfumaria", "Ótica", "Farmácia",
+      "Pet Shop", "Papelaria", "Livraria", "Casa de Tintas", "Materiais de Construção"
+    ],
+    Clínica: [
+      "Clínica Odontológica", "Clínica Médica", "Fisioterapia", "Psicologia",
+      "Nutrição", "Dermatologia", "Estética Avançada", "Ortopedia"
+    ],
+    Academia: [
+      "Academia", "Studio de Pilates", "CrossFit", "Artes Marciais",
+      "Yoga Studio", "Funcional Training", "Personal Studio"
+    ],
+    Salão: [
+      "Salão de Beleza", "Barbearia", "Espaço de Estética", "Studio de Unhas",
+      "Clínica Capilar", "Spa & Beleza"
+    ],
+    Escritório: [
+      "Escritório de Contabilidade", "Advocacia", "Consultoria Empresarial",
+      "Imobiliária", "Despachante", "Assessoria Financeira"
+    ],
+    Construtora: [
+      "Construtora", "Engenharia Civil", "Arquitetura", "Reformas e Construções"
+    ],
+    Hotel: [
+      "Hotel", "Pousada", "Hostel", "Apart Hotel", "Hotel Fazenda"
+    ],
+  };
+
+  const dddPorCidade: Record<string, string> = {
+    "São Paulo": "11", "Campinas": "19", "Santos": "13", "Sorocaba": "15",
+    "Rio de Janeiro": "21", "Niterói": "21", "Belo Horizonte": "31",
+    "Curitiba": "41", "Florianópolis": "48", "Porto Alegre": "51",
+    "Brasília": "61", "Goiânia": "62", "Salvador": "71", "Fortaleza": "85",
+    "Recife": "81", "Manaus": "92", "Belém": "91"
+  };
+
+  const ruasPorCidade: Record<string, string[]> = {
+    "São Paulo": ["Av. Paulista", "Rua Augusta", "Av. Faria Lima", "Rua Oscar Freire", "Av. Brigadeiro"],
+    "Rio de Janeiro": ["Av. Atlântica", "Rua Visconde de Pirajá", "Av. das Américas", "Rua Dias Ferreira"],
+    "Belo Horizonte": ["Av. Afonso Pena", "Rua da Bahia", "Av. Raja Gabaglia", "Rua Tomé de Souza"],
+    "Curitiba": ["Rua XV de Novembro", "Av. Batel", "Rua 24 Horas", "Av. Cândido de Abreu"],
+    "default": ["Rua Principal", "Av. Central", "Rua do Comércio", "Av. Brasil", "Rua das Flores"]
+  };
 
   const gerarClientes = () => {
     if (!cidade || !nicho) {
@@ -32,14 +85,25 @@ const ProspeccaoClientes = () => {
       return;
     }
 
-    // Gera lista fictícia de clientes para demonstração
-    const clientesGerados: Cliente[] = Array.from({ length: 60 }, (_, i) => ({
-      nome: `${nicho} ${cidade} ${i + 1}`,
-      nicho: nicho,
-      contato: `(11) 9${String(Math.floor(Math.random() * 10000)).padStart(4, "0")}-${String(
-        Math.floor(Math.random() * 10000)
-      ).padStart(4, "0")}`,
-    }));
+    const nomes = nomesEstabelecimentos[nicho] || ["Estabelecimento"];
+    const ddd = dddPorCidade[cidade] || "11";
+    const ruas = ruasPorCidade[cidade] || ruasPorCidade.default;
+
+    const clientesGerados: Cliente[] = Array.from({ length: 60 }, (_, i) => {
+      const nomeBase = nomes[i % nomes.length];
+      const sufixo = i < nomes.length ? "" : ` ${Math.floor(i / nomes.length) + 1}`;
+      const rua = ruas[i % ruas.length];
+      const numero = 100 + Math.floor(Math.random() * 900);
+
+      return {
+        nome: `${nomeBase}${sufixo}`,
+        nicho: nicho,
+        contato: `(${ddd}) 9${String(Math.floor(Math.random() * 10000)).padStart(4, "0")}-${String(
+          Math.floor(Math.random() * 10000)
+        ).padStart(4, "0")}`,
+        endereco: `${rua}, ${numero} - ${cidade}`
+      };
+    });
 
     setClientes(clientesGerados);
     toast({
@@ -87,12 +151,23 @@ const ProspeccaoClientes = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="cidade">Cidade</Label>
-                  <Input
-                    id="cidade"
-                    placeholder="Ex: São Paulo"
-                    value={cidade}
-                    onChange={(e) => setCidade(e.target.value)}
-                  />
+                  <Select onValueChange={setCidade}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Escolha a cidade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="São Paulo">São Paulo - SP</SelectItem>
+                      <SelectItem value="Rio de Janeiro">Rio de Janeiro - RJ</SelectItem>
+                      <SelectItem value="Belo Horizonte">Belo Horizonte - MG</SelectItem>
+                      <SelectItem value="Curitiba">Curitiba - PR</SelectItem>
+                      <SelectItem value="Brasília">Brasília - DF</SelectItem>
+                      <SelectItem value="Salvador">Salvador - BA</SelectItem>
+                      <SelectItem value="Fortaleza">Fortaleza - CE</SelectItem>
+                      <SelectItem value="Recife">Recife - PE</SelectItem>
+                      <SelectItem value="Porto Alegre">Porto Alegre - RS</SelectItem>
+                      <SelectItem value="Manaus">Manaus - AM</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
@@ -133,20 +208,30 @@ const ProspeccaoClientes = () => {
                 <CardDescription>Lista de potenciais clientes em {cidade}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto">
+                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
                   {clientes.map((cliente, index) => (
                     <div
                       key={index}
                       className="p-4 bg-muted/50 rounded-lg border border-border hover:border-primary/50 transition-all"
                     >
-                      <h4 className="font-semibold mb-1">{cliente.nome}</h4>
-                      <p className="text-sm text-muted-foreground mb-2">{cliente.nicho}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm flex-1">{cliente.contato}</span>
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-lg mb-1">{cliente.nome}</h4>
+                          <p className="text-sm text-muted-foreground mb-1">
+                            <span className="font-medium">Nicho:</span> {cliente.nicho}
+                          </p>
+                          <p className="text-sm text-muted-foreground mb-1">
+                            <span className="font-medium">Endereço:</span> {cliente.endereco}
+                          </p>
+                          <p className="text-sm text-primary font-medium">
+                            <span className="text-muted-foreground font-medium">Telefone:</span> {cliente.contato}
+                          </p>
+                        </div>
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => copiarContato(index, cliente.contato)}
+                          className="shrink-0"
                         >
                           {copied === index ? (
                             <Check className="w-4 h-4" />
@@ -155,6 +240,14 @@ const ProspeccaoClientes = () => {
                           )}
                         </Button>
                       </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full mt-2"
+                        onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent(cliente.endereco)}`, '_blank')}
+                      >
+                        Ver no Google Maps
+                      </Button>
                     </div>
                   ))}
                 </div>

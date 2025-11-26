@@ -25,6 +25,15 @@ const MensagensProntas = () => {
       Clínica: {
         default: "Olá! 👨‍⚕️ Sua clínica merece uma presença digital à altura. Que tal um site profissional com agendamento online? Vamos conversar! 📅",
       },
+      Academia: {
+        default: "Oi! 💪 Sua academia pode atrair muito mais alunos com presença digital. Que tal um site com agendamento de aulas e planos online? Vamos conversar! 🏋️",
+      },
+      Salão: {
+        default: "Olá! ✨ Seu salão merece estar online! Que tal um site com agendamento automático e galeria de trabalhos? Posso te ajudar! 💇",
+      },
+      Construtora: {
+        default: "Olá! 🏗️ Sua construtora precisa de uma presença digital profissional. Portfólio de obras + formulário de orçamento? Vamos conversar! 📐",
+      },
     },
     longa: {
       Restaurante: {
@@ -64,6 +73,51 @@ Oferecemos:
 Investimento acessível e resultados garantidos!
 
 Posso te mostrar alguns cases de sucesso. Vamos conversar? 🛍️`,
+      },
+      Clínica: {
+        default: `Olá! 👋
+
+Sou da ZanluNet e trabalho com transformação digital para clínicas e consultórios.
+
+Seus pacientes estão buscando você online, mas será que te encontram facilmente? Um site profissional pode:
+
+✅ Aumentar o número de agendamentos
+✅ Passar mais credibilidade
+✅ Facilitar o contato dos pacientes
+✅ Mostrar seus diferenciais
+✅ Integrar com WhatsApp
+
+Temos planos especiais para profissionais da saúde!
+
+Que tal marcarmos uma conversa rápida? 👨‍⚕️`,
+      },
+      Academia: {
+        default: `Olá! 👋
+
+Sou da ZanluNet e ajudo academias a crescerem no digital!
+
+Sua academia pode atrair muito mais alunos com uma presença online forte:
+
+✅ Site profissional com seus diferenciais
+✅ Agendamento de aulas online
+✅ Galeria de fotos da estrutura
+✅ Venda de planos online
+✅ Integração com redes sociais
+
+Academias com site profissional convertem 3x mais!
+
+Vamos conversar sobre como podemos ajudar? 💪`,
+      },
+    },
+    followup: {
+      Restaurante: {
+        default: "Oi! Vi que você visualizou minha mensagem. Conseguiu dar uma olhada na proposta? Se tiver alguma dúvida, é só chamar! Tenho cases incríveis para te mostrar 🍽️",
+      },
+      Loja: {
+        default: "Oi! Tudo bem? Pensei em você e queria saber se gostaria de ver alguns exemplos de lojas virtuais que criamos. Tenho certeza que vai gostar! 🛍️",
+      },
+      Clínica: {
+        default: "Olá! Conseguiu pensar na nossa conversa? Preparei uma proposta especial para sua clínica. Quando podemos conversar? 👨‍⚕️",
       },
     },
   };
@@ -128,6 +182,7 @@ Posso te mostrar alguns cases de sucesso. Vamos conversar? 🛍️`,
                     <SelectContent>
                       <SelectItem value="curta">Mensagem Curta (Primeira abordagem)</SelectItem>
                       <SelectItem value="longa">Mensagem Longa (Detalhada)</SelectItem>
+                      <SelectItem value="followup">Follow-up (Segunda mensagem)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -142,6 +197,9 @@ Posso te mostrar alguns cases de sucesso. Vamos conversar? 🛍️`,
                       <SelectItem value="Restaurante">Restaurante</SelectItem>
                       <SelectItem value="Loja">Loja/Comércio</SelectItem>
                       <SelectItem value="Clínica">Clínica/Saúde</SelectItem>
+                      <SelectItem value="Academia">Academia</SelectItem>
+                      <SelectItem value="Salão">Salão de Beleza</SelectItem>
+                      <SelectItem value="Construtora">Construtora</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

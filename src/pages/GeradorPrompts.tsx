@@ -17,16 +17,22 @@ const GeradorPrompts = () => {
 
   const promptTemplates: Record<string, Record<string, string>> = {
     "landing-page": {
-      default: "Crie uma landing page moderna e conversiva com seções: hero com CTA, benefícios, depoimentos, preços e footer. Use animações suaves e design responsivo.",
+      default: "Crie uma landing page moderna e conversiva com:\n- Hero section impactante com título chamativo, subtítulo explicativo e CTA principal\n- Seção de benefícios com ícones e descrições\n- Seção de como funciona (3-4 passos)\n- Depoimentos de clientes com fotos e avaliações\n- Tabela de preços com 3 planos\n- FAQ com perguntas frequentes\n- Footer completo com links e redes sociais\n\nUse animações suaves ao scroll, gradientes modernos e design responsivo.",
     },
     "dashboard": {
-      default: "Crie um dashboard administrativo completo com sidebar, gráficos interativos, tabelas de dados, sistema de notificações e perfil de usuário.",
+      default: "Crie um dashboard administrativo completo com:\n- Sidebar responsiva com menu de navegação\n- Header com busca, notificações e perfil do usuário\n- Cards de métricas principais (KPIs)\n- Gráficos interativos (linha, barra, pizza) usando recharts\n- Tabela de dados com paginação, filtros e ordenação\n- Modal para ações rápidas\n- Sistema de notificações toast\n- Tema dark/light\n\nUse design moderno, cores suaves e componentes reutilizáveis.",
     },
     "ecommerce": {
-      default: "Crie uma loja online completa com catálogo de produtos, carrinho de compras, checkout, painel administrativo e integração com pagamento.",
+      default: "Crie uma loja online completa com:\n- Página inicial com produtos em destaque e categorias\n- Página de listagem com filtros (preço, categoria, ordenação)\n- Página de detalhes do produto com galeria de imagens\n- Carrinho de compras com cálculo de subtotal e frete\n- Checkout multi-step (dados, endereço, pagamento)\n- Painel do vendedor com gestão de produtos e pedidos\n- Sistema de avaliações e comentários\n- Integração com API de pagamento\n\nUse imagens de alta qualidade e UX otimizada para conversão.",
     },
     "saas": {
-      default: "Crie uma aplicação SaaS completa com autenticação, dashboard do usuário, sistema de planos/assinaturas, área de configurações e documentação.",
+      default: "Crie uma aplicação SaaS completa com:\n- Landing page de vendas com planos e preços\n- Sistema de autenticação (login/cadastro/recuperar senha)\n- Onboarding guiado para novos usuários\n- Dashboard principal com estatísticas e ações rápidas\n- Área de configurações (perfil, conta, notificações, integrações)\n- Sistema de planos e upgrade/downgrade\n- Documentação interativa ou central de ajuda\n- Área de suporte/tickets\n- Billing e histórico de pagamentos\n\nUse design profissional, fluxos bem definidos e componentes escaláveis.",
+    },
+    "blog": {
+      default: "Crie um blog completo com:\n- Homepage com posts em destaque e grid de artigos\n- Página de artigo com formatação rica e table of contents\n- Sistema de categorias e tags\n- Busca de artigos\n- Sidebar com posts relacionados e populares\n- Área administrativa para criar/editar posts\n- Sistema de comentários\n- Newsletter signup\n\nUse tipografia otimizada para leitura e SEO.",
+    },
+    "portfolio": {
+      default: "Crie um portfólio profissional com:\n- Hero section com apresentação e foto\n- Seção sobre mim com skills e experiências\n- Grid de projetos com filtro por categoria\n- Página de detalhes de cada projeto com imagens e descrição\n- Seção de depoimentos de clientes\n- Formulário de contato funcional\n- Links para redes sociais\n\nUse animações elegantes e design minimalista profissional.",
     },
   };
 
@@ -103,6 +109,8 @@ Inclua:
                     <SelectItem value="dashboard">Dashboard/Painel</SelectItem>
                     <SelectItem value="ecommerce">E-commerce</SelectItem>
                     <SelectItem value="saas">SaaS Completo</SelectItem>
+                    <SelectItem value="blog">Blog/Notícias</SelectItem>
+                    <SelectItem value="portfolio">Portfólio Profissional</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
