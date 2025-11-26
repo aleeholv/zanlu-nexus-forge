@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, FileText, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -10,10 +14,19 @@ const GeradorPrompts = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-  const [tipoProjeto, setTipoProjeto] = useState("");
-  const [estiloVisual, setEstiloVisual] = useState("");
-  const [nicho, setNicho] = useState("");
   const [generatedPrompt, setGeneratedPrompt] = useState("");
+  
+  const [formData, setFormData] = useState({
+    nomeProjeto: "",
+    tipoProjeto: "",
+    estiloVisual: "",
+    paletaCores: "",
+    nicho: "",
+    publicoAlvo: "",
+    objetivo: "",
+    funcionalidades: "",
+    recursos: [] as string[]
+  });
 
   const promptTemplates: Record<string, Record<string, string>> = {
     "landing-page": {
@@ -36,28 +49,71 @@ const GeradorPrompts = () => {
     },
   };
 
+  const recursosExtras = [
+    { id: "auth", label: "Sistema de Autenticação (Login/Cadastro)" },
+    { id: "dashboard", label: "Dashboard Administrativo" },
+    { id: "analytics", label: "Analytics e Métricas" },
+    { id: "notifications", label: "Sistema de Notificações" },
+    { id: "search", label: "Busca Avançada com Filtros" },
+    { id: "payments", label: "Integração com Pagamentos" },
+    { id: "api", label: "Integração com APIs Externas" },
+    { id: "email", label: "Sistema de E-mails Automatizados" }
+  ];
+
+  const toggleRecurso = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      recursos: prev.recursos.includes(id) 
+        ? prev.recursos.filter(r => r !== id)
+        : [...prev.recursos, id]
+    }));
+  };
+
   const generatePrompt = () => {
+    const { nomeProjeto, tipoProjeto, estiloVisual, paletaCores, nicho, publicoAlvo, objetivo, funcionalidades, recursos } = formData;
+    
     if (!tipoProjeto || !estiloVisual || !nicho) {
       toast({
         title: "Campos obrigatórios",
-        description: "Preencha todos os campos para gerar o prompt",
+        description: "Preencha pelo menos Tipo de Projeto, Estilo Visual e Nicho",
         variant: "destructive",
       });
       return;
     }
 
     const basePrompt = promptTemplates[tipoProjeto]?.default || "";
-    const prompt = `${basePrompt}
+    
+    let prompt = nomeProjeto 
+      ? `Crie o projeto "${nomeProjeto}"\n\n${basePrompt}`
+      : basePrompt;
+
+    prompt += `\n\n📋 ESPECIFICAÇÕES DO PROJETO:
 
 ESTILO VISUAL: ${estiloVisual}
+${paletaCores ? `PALETA DE CORES: ${paletaCores}` : ''}
 NICHO: ${nicho}
+${publicoAlvo ? `PÚBLICO-ALVO: ${publicoAlvo}` : ''}
+${objetivo ? `OBJETIVO PRINCIPAL: ${objetivo}` : ''}`;
 
-Inclua:
-- Design responsivo e moderno
-- Animações e transições suaves
-- Paleta de cores adequada ao nicho
-- Componentes reutilizáveis
-- Boas práticas de UX/UI`;
+    if (funcionalidades) {
+      prompt += `\n\n✨ FUNCIONALIDADES ESPECÍFICAS:\n${funcionalidades}`;
+    }
+
+    if (recursos.length > 0) {
+      const recursosTexto = recursos.map(id => 
+        recursosExtras.find(r => r.id === id)?.label
+      ).filter(Boolean).join('\n- ');
+      prompt += `\n\n🔧 RECURSOS EXTRAS NECESSÁRIOS:\n- ${recursosTexto}`;
+    }
+
+    prompt += `\n\n💡 REQUISITOS GERAIS:
+- Design 100% responsivo (mobile, tablet, desktop)
+- Animações suaves e microinterações
+- Performance otimizada
+- Acessibilidade (WCAG)
+- SEO otimizado
+- Código limpo e componentizado
+- Tema dark/light mode`;
 
     setGeneratedPrompt(prompt);
   };
@@ -99,52 +155,131 @@ Inclua:
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Tipo de Projeto</label>
-                <Select onValueChange={setTipoProjeto}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Escolha o tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="landing-page">Landing Page</SelectItem>
-                    <SelectItem value="dashboard">Dashboard/Painel</SelectItem>
-                    <SelectItem value="ecommerce">E-commerce</SelectItem>
-                    <SelectItem value="saas">SaaS Completo</SelectItem>
-                    <SelectItem value="blog">Blog/Notícias</SelectItem>
-                    <SelectItem value="portfolio">Portfólio Profissional</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="nomeProjeto">Nome do Projeto (Opcional)</Label>
+                <Input
+                  id="nomeProjeto"
+                  placeholder="Ex: Sistema de Agendamento MedClinic"
+                  value={formData.nomeProjeto}
+                  onChange={(e) => setFormData({ ...formData, nomeProjeto: e.target.value })}
+                />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="tipoProjeto">Tipo de Projeto *</Label>
+                  <Select onValueChange={(value) => setFormData({ ...formData, tipoProjeto: value })}>
+                    <SelectTrigger id="tipoProjeto">
+                      <SelectValue placeholder="Escolha o tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="landing-page">Landing Page</SelectItem>
+                      <SelectItem value="dashboard">Dashboard/Painel</SelectItem>
+                      <SelectItem value="ecommerce">E-commerce</SelectItem>
+                      <SelectItem value="saas">SaaS Completo</SelectItem>
+                      <SelectItem value="blog">Blog/Notícias</SelectItem>
+                      <SelectItem value="portfolio">Portfólio Profissional</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="estiloVisual">Estilo Visual *</Label>
+                  <Select onValueChange={(value) => setFormData({ ...formData, estiloVisual: value })}>
+                    <SelectTrigger id="estiloVisual">
+                      <SelectValue placeholder="Escolha o estilo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dark Futurista com Neon">Dark Futurista</SelectItem>
+                      <SelectItem value="Minimalista Clean">Minimalista</SelectItem>
+                      <SelectItem value="Glassmorphism Moderno">Glassmorphism</SelectItem>
+                      <SelectItem value="Colorido e Vibrante">Colorido e Vibrante</SelectItem>
+                      <SelectItem value="Elegante e Corporativo">Elegante e Corporativo</SelectItem>
+                      <SelectItem value="Moderno e Gradiente">Moderno e Gradiente</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="paletaCores">Paleta de Cores Preferida</Label>
+                  <Input
+                    id="paletaCores"
+                    placeholder="Ex: Azul e laranja, tons de verde, roxo vibrante"
+                    value={formData.paletaCores}
+                    onChange={(e) => setFormData({ ...formData, paletaCores: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="nicho">Nicho *</Label>
+                  <Select onValueChange={(value) => setFormData({ ...formData, nicho: value })}>
+                    <SelectTrigger id="nicho">
+                      <SelectValue placeholder="Escolha o nicho" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Tecnologia/Software">Tecnologia/Software</SelectItem>
+                      <SelectItem value="Saúde/Fitness">Saúde/Fitness</SelectItem>
+                      <SelectItem value="Educação/Cursos">Educação/Cursos</SelectItem>
+                      <SelectItem value="Marketing/Agência">Marketing/Agência</SelectItem>
+                      <SelectItem value="Finanças/Contabilidade">Finanças/Contabilidade</SelectItem>
+                      <SelectItem value="E-commerce/Vendas">E-commerce/Vendas</SelectItem>
+                      <SelectItem value="Restaurante/Food">Restaurante/Food</SelectItem>
+                      <SelectItem value="Imobiliário">Imobiliário</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Estilo Visual</label>
-                <Select onValueChange={setEstiloVisual}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Escolha o estilo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Dark Futurista com Neon">Dark Futurista</SelectItem>
-                    <SelectItem value="Minimalista Clean">Minimalista</SelectItem>
-                    <SelectItem value="Glassmorphism Moderno">Glassmorphism</SelectItem>
-                    <SelectItem value="Colorido e Vibrante">Colorido e Vibrante</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="publicoAlvo">Público-Alvo</Label>
+                <Input
+                  id="publicoAlvo"
+                  placeholder="Ex: Empresários de 30-50 anos, estudantes universitários, profissionais de TI"
+                  value={formData.publicoAlvo}
+                  onChange={(e) => setFormData({ ...formData, publicoAlvo: e.target.value })}
+                />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Nicho</label>
-                <Select onValueChange={setNicho}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Escolha o nicho" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Tecnologia/Software">Tecnologia/Software</SelectItem>
-                    <SelectItem value="Saúde/Fitness">Saúde/Fitness</SelectItem>
-                    <SelectItem value="Educação/Cursos">Educação/Cursos</SelectItem>
-                    <SelectItem value="Marketing/Agência">Marketing/Agência</SelectItem>
-                    <SelectItem value="Finanças/Contabilidade">Finanças/Contabilidade</SelectItem>
-                    <SelectItem value="E-commerce/Vendas">E-commerce/Vendas</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="objetivo">Objetivo Principal do Projeto</Label>
+                <Textarea
+                  id="objetivo"
+                  placeholder="Ex: Aumentar conversões de leads em 40%, facilitar o agendamento de consultas, vender cursos online"
+                  value={formData.objetivo}
+                  onChange={(e) => setFormData({ ...formData, objetivo: e.target.value })}
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="funcionalidades">Funcionalidades Específicas</Label>
+                <Textarea
+                  id="funcionalidades"
+                  placeholder="Descreva funcionalidades específicas que você precisa. Ex: Sistema de chat em tempo real, integração com WhatsApp, área de membros com níveis de acesso"
+                  value={formData.funcionalidades}
+                  onChange={(e) => setFormData({ ...formData, funcionalidades: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label>Recursos Extras</Label>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {recursosExtras.map((recurso) => (
+                    <div key={recurso.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={recurso.id}
+                        checked={formData.recursos.includes(recurso.id)}
+                        onCheckedChange={() => toggleRecurso(recurso.id)}
+                      />
+                      <label
+                        htmlFor={recurso.id}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                      >
+                        {recurso.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <Button
@@ -153,7 +288,7 @@ Inclua:
                 size="lg"
               >
                 <FileText className="w-5 h-5 mr-2" />
-                Gerar Prompt
+                Gerar Prompt Personalizado
               </Button>
             </CardContent>
           </Card>
